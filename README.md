@@ -1,4 +1,4 @@
-# MoodieFlix: Android Application Documentation#
+# MoodieFlix: Android Application Documentation
 
 ## Introduction
 
