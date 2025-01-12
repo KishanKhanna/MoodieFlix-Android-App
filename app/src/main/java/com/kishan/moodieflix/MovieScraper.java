@@ -45,7 +45,7 @@ public class MovieScraper {
                 // Construct the URL based on genre
                 String url = "https://www.rottentomatoes.com/browse/movies_at_home/genres:" + genre + sort +"?page=" + page;
 
-                Document doc = Jsoup.connect(url).timeout(10000).get();
+                Document doc = Jsoup.connect(url).get();
                 Elements movies = doc.select("div.flex-container");
 
                 for (Element movie : movies) {

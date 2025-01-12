@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:gravity="center"
-        android:text=" MOODIE FLIX"
+        android:text="MOODIE FLIX"
         android:textColor="#6750a4"
         android:textColorLink="#8c52ff"
         android:textSize="50sp"

@@ -17,6 +17,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +32,7 @@ public class RecommendationActivity extends AppCompatActivity {
     private String currentSort = ""; // Tracks the current sort option
     private String genre = null; // Default genre
     private boolean isLoading = false;
+    private View loadingOverlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,8 @@ public class RecommendationActivity extends AppCompatActivity {
         loadMoreButton.setOnClickListener(v -> loadMoreMovies());
         setupRecyclerView();
         setupSortSpinner();
+
+        loadingOverlay = findViewById(R.id.loading_overlay);
         fetchMovies(genre, currentSort, currentPage); // Initial fetch
     }
 
@@ -98,20 +103,60 @@ public class RecommendationActivity extends AppCompatActivity {
 
     private void fetchMovies(String genre, String sort, int page) {
 
+        if (!NetworkUtils.isNetworkAvailable(this)) {
+            showRetrySnackbar();
+            return;
+        }
+
         if (isLoading) return; // Prevent multiple requests
         isLoading = true;
-        MovieScraper.fetchMovies(genre, sort, page, movies -> {
-            // Clear the movie list and add fetched movies
-            movieList.clear();
-            movieList.addAll(movies);
-            movieAdapter.notifyDataSetChanged();
+
+        // Show the loading overlay
+        loadingOverlay.setVisibility(View.VISIBLE);
+        MovieScraper.fetchMovies(genre, sort, page, new MovieScraper.MovieFetchListener(){
+
+            @Override
+            public void onMoviesFetched(List<Movie> movies) {
+
+                // Clear the movie list and add fetched movies
+                movieList.clear();
+                movieList.addAll(movies);
+                movieAdapter.notifyDataSetChanged();
+                // Hide the loading overlay
+                loadingOverlay.setVisibility(View.GONE);
+                isLoading = false;
+            }
         });
         Toast.makeText(this, "Hang on, Fetching movies...", Toast.LENGTH_SHORT).show();
     }
 
     private void loadMoreMovies() {
-        currentPage++; // Increment page number
-        fetchMovies(genre, currentSort, currentPage); // Fetch next page of movies
+
+        if (!NetworkUtils.isNetworkAvailable(this)) {
+            showRetrySnackbar();
+            return;
+        }
+
+        if (isLoading) return; // Prevent multiple requests
+        isLoading = true;
+        MovieScraper.fetchMovies(genre, currentSort, currentPage+1, new MovieScraper.MovieFetchListener(){
+
+            @Override
+            public void onMoviesFetched(List<Movie> movies) {
+
+                // Clear the movie list and add fetched movies
+                movieList.clear();
+                movieList.addAll(movies);
+                movieAdapter.notifyDataSetChanged();
+                isLoading = false;
+                currentPage++; // Increment page number
+            }
+        });
         Log.d("TAG", "loadMoreMovies:RAN "+ currentPage);
+    }
+    private void showRetrySnackbar() {
+        Snackbar.make(findViewById(R.id.main), "No internet connection.\nPlease try again", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Retry", v -> fetchMovies(genre, currentSort, currentPage))
+                .show();
     }
 }

@@ -43,7 +43,6 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.jsoup)
     implementation(libs.lottie)
-    implementation(libs.converter.gson)
     implementation(libs.glide)
     implementation(libs.glideCompiler)
 }
