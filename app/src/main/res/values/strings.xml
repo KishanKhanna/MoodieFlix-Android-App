@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">MoodieFlix</string>
+    <string name="how_are_you_feeling_today">How are you feeling today?</string>
+    <string name="happy">Happy</string>
+    <string name="sad">Sad</string>
+    <string name="angry">Angry</string>
+    <string name="relaxed">Relaxed</string>
+    <string name="anxious">Anxious</string>
+    <string name="bored">Bored</string>
+    <string name="romantic">Romantic</string>
+    <string name="nostalgic">Nostalgic</string>
+    <string name="load_more">Load More</string>
+    <string name="critic_rating_n_a">Critic Rating: N/A</string>
+    <string name="audience_rating_n_a">Audience Rating: N/A</string>
+    <string name="release">Release</string>
+    <string name="movie_name">Movie Name</string>
+    <string name="movie_poster">Movie Poster</string>
+    <string-array name="sort_options">
+         <item>Sort By</item>
+         <item>Newest</item>
+         <item>Most Popular</item>
+         <item>A → Z</item>
+         <item>Critics (Highest)</item>
+         <item>Audience (Highest)</item>
+     </string-array>
+</resources>
